@@ -56,6 +56,8 @@ published: true
 | 33 | [junitperf](https://github.com/houbb/junitperf) | 性能测试框架，测试报告生成 | TEST |
 | 34 | [houbb.github.io](https://github.com/houbb/houbb.github.io) | 个人博客 | 学习 |
 
+没价值的项目可以闭源，别浪费大家的时间。
+
 # 数据结构算法
 
 ## 说明
@@ -79,6 +81,38 @@ published: true
 ## 说明
 
 各种技术专题汇总。
+
+# 收费专题
+
+
+## SQL 学习
+
+SQL 的应用范围非常广，但是发现自己其实学的并不精细。
+
+可以重新梳理一遍。
+
+## 发布范围
+
+全平台
+
+51CTO
+
+掘金
+
+CSDN 
+
+微信公众号 
+
+等等。
+
+# 考虑收费有价值的项目
+
+leetcode 系列？
+
+面试宝典？
+
+
+
 
 # 小结
 

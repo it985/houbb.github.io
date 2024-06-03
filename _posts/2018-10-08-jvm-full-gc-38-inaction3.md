@@ -7,6 +7,16 @@ tags: [jvm, gc, bytecode, sh]
 published: true
 ---
 
+# 拓展阅读
+
+[JVM FULL GC 生产问题 I-多线程通用实现](https://houbb.github.io/2018/10/08/jvm-full-gc-37-inaction)
+
+[JVM FULL GC 生产问题 II-如何定位内存泄露？ 线程通用实现](https://houbb.github.io/2018/10/08/jvm-full-gc-38-inaction2)
+
+[JVM FULL GC 生产问题 III-多线程执行队列的封装实现，进一步抽象](https://houbb.github.io/2018/10/08/jvm-full-gc-38-inaction3)
+
+[java 多线程实现通用方法 threadpool implement in java](https://houbb.github.io/2018/10/08/jvm-full-gc-39-inaction4)
+
 # 情景回顾
 
 我们在上一篇 [JVM FULL GC 生产问题笔记](https://houbb.github.io/2018/10/08/jvm-full-gc-37-inaction) 中提出了如何更好的实现一个多线程消费的实现方式。
@@ -15,11 +25,9 @@ published: true
 
 本来以为一切都可以结束的，不过又发生了一点点意外，这里记录一下，避免自己和小伙伴们踩坑。
 
+但是上一篇的文章还是存在一点不足，原来的**实现无法直接复用**。
 
-# 生产者-消费者
-
-原来的实现无法复用。
-
+为什么无法复用呢？因为不够抽象！
 
 # java 实现
 

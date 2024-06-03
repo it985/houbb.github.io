@@ -1,179 +1,125 @@
 ---
 layout: post
-title: 开源网关对比 gateway
-date: 2018-11-21 8:01:55 +0800
-categories: [Distributed]
-tags: [gateway, distributed, sh]
+title: 开源网关-00-overview 概览
+date:  2021-07-19 09:20:31 +0800
+categories: [Gateway]
+tags: [gateway, opensource, sh]
 published: true
 ---
 
-# 常见的API网关主要提供以下的功能：
+# chat
 
-- 反向代理和路由：大多数项目采用网关的解决方案的最主要的原因。给出了访问后端 API 的所有客户端的单一入口，并隐藏内部服务部署的细节。
+## 网关
 
-- 负载均衡：网关可以将单个传入的请求路由到多个后端目的地。
+网关（Gateway）是计算机网络中的一种设备，它在不同的网络或网络协议之间进行数据传输。网关通常用于连接两个不同的网络，如局域网（LAN）和广域网（WAN），或者不同类型的网络，如以太网和Wi-Fi网络。网关的主要作用是将数据从一个网络转换成另一个网络能够理解的格式，从而实现不同网络之间的通信。
 
-- 身份验证和授权：网关应该能够成功进行身份验证并仅允许可信客户端访问 API，并且还能够使用类似 RBAC 等方式来授权。
+以下是网关的一些详细介绍：
 
-- IP 列表白名单/黑名单：允许或阻止某些 IP 地址通过。
+1. **协议转换**：网关能够将一种网络协议转换为另一种网络协议，以确保数据能够在不同的网络间传输。
 
-- 性能分析：提供一种记录与 API 调用相关的使用和其他有用度量的方法。
+2. **地址转换**：网关可以执行地址转换，如网络地址转换（NAT），它允许多个设备共享一个公共IP地址。
 
-- 限速和流控：控制 API 调用的能力。
+3. **路由选择**：网关还可以执行路由选择，决定数据包的最佳传输路径。
 
-- 请求变形：在进一步转发之前，能够在转发之前转换请求和响应(包括 Header 和 Body)。
+4. **防火墙功能**：某些网关设备还具备防火墙功能，能够保护内部网络不受外部攻击。
 
-- 版本控制：同时使用不同版本的 API 选项或可能以金丝雀发布或蓝/绿部署的形式提供慢速推出 API。
+5. **VPN支持**：虚拟私人网络（VPN）网关允许远程用户通过加密的连接安全地访问内部网络。
 
-- 断路器：微服务架构模式有用，以避免使用中断。
+6. **应用层网关**：应用层网关（如HTTP网关）在应用层上工作，它们可以处理应用层协议，如HTTP、SMTP等。
 
-- 多协议支持：WebSocket/GRPC。
+7. **透明网关**：透明网关对用户来说是不可见的，它在网络层工作，用户无需对其进行配置。
 
-- 缓存：减少网络带宽和往返时间消耗，如果可以缓存频繁要求的数据，则可以提高性能和响应时间
+8. **非透明网关**：非透明网关需要用户知道其存在，并且可能需要进行特定的配置。
 
-- API 文档：如果计划将 API 暴露给组织以外的开发人员，那么必须考虑使用 API 文档，例如 Swagger 或 OpenAPI。
+9. **智能网关**：智能网关具备处理更复杂任务的能力，如数据包过滤、状态监测、负载均衡等。
 
-# 不同技术栈的区分
+10. **家庭和办公室使用**：在家庭或办公室网络中，路由器通常集成了网关的功能，允许家庭或办公室的设备连接到互联网。
 
-我们从不同的技术栈来做个api网关分类
+11. **企业级应用**：在大型企业网络中，网关可能更加复杂，需要处理大量的数据传输和复杂的安全协议。
 
-## openresty+lua开源api网关
+12. **云服务网关**：随着云计算的普及，云服务网关允许企业通过互联网安全地访问云服务和应用程序。
 
-代表有Kong、APISIX、3scale、、API Umbrella
+13. **物联网（IoT）网关**：IoT网关连接了物联网设备和网络，允许传感器和智能设备的数据被收集和分析。
 
-Kong不用做太多介绍，应该是开源里面最热的一个api网关了，相对庞大复杂
+网关是网络通信中不可或缺的一部分，它们确保了不同网络和设备之间的顺畅通信，同时也提供了必要的安全和路由功能。
 
-APISIX，轻巧+极致性能+热插件，值得一提到是插件中有个serverless的支持，简单说就是写一段自定义lua脚本，挂载到openresty任意阶段执行！
+## 优秀的 java 开源网关有哪些？
 
-## golang开源api网关
+Java 开源网关是微服务架构中的关键组件，它们通常负责处理API路由、负载均衡、认证授权、监控和安全等功能。
 
-代表有Tky、Manba、GOKU API Gateway、Ambassador(基于Envoy)、Gloo(基于Envoy)、KrakenD、BFE
+以下是一些优秀的 Java 开源网关：
 
-## java开源api网关
+1. **Spring Cloud Gateway**
+   - 基于Spring 5.0, Spring Boot 2.0和WebFlux开发，性能高于Zuul，为微服务架构提供统一的API路由管理方式。
+   - 支持与Spring Cloud Discovery Client（如Eureka）、Ribbon、Hystrix等组件配合使用，实现路由转发、负载均衡、熔断、鉴权、路径重写、日志监控等功能。
 
-代表有Gravitee、Zuul、Sentinel、MuleSoft、WSO2、Soul
+2. **Zuul**
+   - Netflix开源的微服务网关，Spring Cloud对其进行了整合与增强。
+   - 主要功能包括认证和安全、性能监测、动态路由、压力测试、负载卸载和静态资源处理。
 
-## Erlang开源api网关
+3. **Soul**
+   - 异步的、高性能的、跨语言的、响应式的API网关，支持HTTP、Dubbo和Spring Cloud协议。
+   - 插件化设计，支持限流、熔断、代理转发等，流量配置动态化，性能极高。
 
-代表有RIG – Reactive Interaction Gateway
+4. **Gravitee.io API Gateway**
+   - 基于Vert.X开发的高性能接口网关，支持Swagger导入接口、文档管理、性能分析、操作审计、日志和负载均衡等功能。
 
-## .net开源api网关
+5. **WSO2 API Microgateway**
+   - 云原生、以开发人员为中心和去中心化的API网关，主要用于微服务。
+   - 使用Java构建，简化了在分布式微服务架构中创建、部署和保护API的过程。
 
-代表有Ocelot
+6. **Fizz Gateway**
+   - 基于Spring WebFlux开发的微服务网关，支持热服务编排、自动授权选择、线上服务脚本编码、在线测试、高性能路由、API审核管理等。
 
-## Node.js开源api网关
+7. **Apiman**
+   - 基于Java的API管理工具，具有丰富的API设计和配置层以及极快的运行时间。
 
-代表有express-gateway
+8. **Gloo Edge**
+   - 基于Go的Kubernetes原生入口控制器和API网关，构建在Envoy Proxy之上。
 
+9. **Goku API Gateway**
+   - 使用Go构建的云原生架构微服务网关，具有高性能HTTP转发和动态路由等功能。
 
+10. **Fusio**
+    - 基于PHP的API管理解决方案，用于构建和管理REST API。
 
-# Nginx
+这些网关各有特点，选择时可以根据具体的技术栈、性能要求、功能需求以及社区支持等因素进行综合考虑。
 
-Nginx 是异步框架的网页服务器，也可以用作反向代理、负载平衡器和 HTTP 缓存。
+开源网址：
 
-该软件由伊戈尔·赛索耶夫创建并于 2004 年首次公开发布。2011 年成立同名公司以提供支持。2019 年 3 月 11 日，Nginx 公司被 F5 Networks 以 6.7 亿美元收购。
+1. **Spring Cloud Gateway**
+   - 网址：[Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway/)
 
-Nginx 有以下的特点：
+2. **Zuul**
+   - 网址：[Netflix/zuul](https://github.com/Netflix/zuul)
 
-- 由 C 编写，占用的资源和内存低，性能高。
+3. **flying-fish-gateway**
+   - 网址：[flying-fish-gateway](https://gitee.com/omsgit/flying-fish-gateway)
 
-- 单进程多线程，当启动 Nginx 服务器，会生成一个 master 进程，master 进程会 fork 出多个 worker 进程，由 worker 线程处理客户端的请求。
+4. **Spring Cloud - Zuul**
+   - 网址：[Spring Cloud - Zuul](https://blog.csdn.net/songjianlong/article/details/133267519)
 
-- 支持反向代理，支持 7 层负载均衡(拓展负载均衡的好处)。
+请注意，给出的链接是直接从搜索结果中提取的，访问时请确保网络安全和项目的活跃度。
 
-- 高并发，Nginx 是异步非阻塞型处理请求，采用的 epollandqueue 模式。
+## chat 优秀的 Java 开源网关
 
-- 处理静态文件速度快。
+以下是一些优秀的 Java 开源网关：
 
-- 高度模块化，配置简单。社区活跃，各种高性能模块出品迅速。
+1. **Spring Cloud Gateway**：Spring Cloud Gateway 是一个基于 Spring Framework 5，Spring Boot 2 和 Project Reactor 的网关解决方案。它具有强大的路由和过滤功能，可用于构建高性能的微服务架构。
 
-# Kong
+2. **Zuul**：Zuul 是 Netflix 开源的网关服务，也是 Spring Cloud 生态系统中的一部分。它可以用于动态路由、身份验证、压力测试、负载均衡等。
 
-Kong 是基于 NGINX 和 OpenResty 的开源 API 网关。
+3. **Kong**：Kong 是一个可扩展的、分布式的 API 网关，它构建在 Nginx 之上，并以 Lua 编程语言进行扩展。Kong 提供了丰富的插件生态系统，可以灵活地满足各种 API 管理和网关需求。
 
-Kong 的总体基础结构由三个主要部分组成：NGINX 提供协议实现和工作进程管理，OpenResty 提供 Lua 集成并挂钩到 NGINX 的请求处理阶段。
+4. **APIAxle**：APIAxle 是一个开源的 API 网关，它基于 Node.js 构建。它提供了许多功能，包括流量控制、缓存、监控和身份验证。
 
-而 Kong 本身利用这些挂钩来路由和转换请求。数据库支持 Cassandra 或 Postgres 存储所有配置。
+5. **Tyk**：Tyk 是一个轻量级的、高性能的 API 网关和管理平台，用于管理、监控和控制对 APIs 的访问。它支持多种协议和身份验证方法，提供了强大的路由和转换功能。
 
-# APISIX
-
-Apache APISIX 是一个动态、实时、高性能的 API 网关， 提供负载均衡、动态上游、灰度发布、服务熔断、身份认证、可观测性等丰富的流量管理功能。
-
-APISIX 于 2019 年 4 月由中国的支流科技创建，于 6 月开源，并于同年 10 月进入 Apache 孵化器。
-
-支流科技对应的商业化产品的名字叫 API7 。APISIX 旨在处理大量请求，并具有较低的二次开发门槛。
-
-APISIX 的主要功能和特点有：
-
-- 云原生设计，轻巧且易于容器化。
-
-- 集成了统计和监视组件，例如 Prometheus，Apache Skywalking 和 Zipkin。
-
-- 支持 gRPC，Dubbo，WebSocket，MQTT 等代理协议，以及从 HTTP 到 gRPC 的协议转码，以适应各种情况。
-
-- 担当 OpenID 依赖方的角色，与 Auth0，Okta 和其他身份验证提供程序的服务连接。
-
-- 通过在运行时动态执行用户功能来支持无服务器，从而使网关的边缘节点更加灵活。
-
-- 支持插件热加载。
-
-- 不锁定用户，支持混合云部署架构。
-
-- 网关节点无状态，可以灵活扩展。
-
-从这个角度来看，API 网关可以替代 Nginx 来处理南北流量，也可以扮演 Istio 控制平面和 Envoy 数据平面的角色来处理东西向流量。
-
-# Tyk
-
-Tyk 是一款基于 Golang 和 Redis 构建的开源 API 网关。它于 2014 年创建，比 AWS 的 API 网关即服务功能早。Tyk 用 Golang 编写，并使用 Golang 自己的 HTTP 服务器。
-
-Tyk 支持不同的运行方式：云，混合(在自己的基础架构中为 GW)和本地。
-
-# Zuul
-
-Zuul 是 Netflix 开源的基于 Java 的 API 网关组件。
-
-![Zuul](https://s6.51cto.com/oss/202107/25/322f5362e07c56f8a7270ce9e683d0cc.jpg)
-
-# Gravitee
-
-Gravitee 是 Gravitee.io 开源的，基于 Java 的，简单易用，性能高，且具成本效益的开源 API 平台，可帮助组织保护，发布和分析您的 API。
-
-# 总结
-
-本文分析了几种开源 API 网关的架构和基本功能，为大家在架构选型的时候提供一些基本的参考信息，本文做作的测试数据比较简单，场景也比较单一，不能作为实际选型的依据。
-
-Nginx：基于 C 开发的高性能 API 网关，拥有众多的插件，如果你的 API 管理的需求比较简单，接受手工配置路由，Nginx 是个不错的选择。
-
-Kong：是基于 Nginx 的 API 网关，使用 OpenResty 和 Lua 扩展，后台使用 PostgreSQL，功能众多，社区的热度很高，但是性能上看比起 Nginx 有相当的损失。如果你对功能和扩展性有要求，可以考虑 Kong。
-
-APISIX：和 Kong 的架构类似，但是采用了云原生的设计，使用 ETCD 作为后台，性能上比起 Kong 有相当的优势，适合对性能要求高的云原生部署的场景。特别提一下，APISIX 支持 MQTT 协议，对于构建 IOT 应用非常友好。
-
-Tyk：使用 Golang 开发，后台使用 Redis，性能不错，如果你喜欢 Golang，可以考虑一下。
-
-要注意的是 Tyk 的开源协议是 MPL，是属于修改代码后不能闭源，对于商业化应用不是很友好。
-
-Zuul：是 Netflix 开源的基于 Java 的 API 网关组件，他并不是一款开箱即用的 API 网关，需要和你的 Java 应用一起构建，所有的功能都是通过集成其他组件的方式来使用。
-
-适合对于 Java 比较熟悉，用 Java 构建的应用的场景，缺点是性能其他的开源产品要差一些，同样的性能条件下，对于资源的要求会更多。
-
-Gravitee：是 Gravitee.io 开源的基于 Java 的 API 管理平台，它能对 API 的生命周期进行管理，即使是开源版本，也有很好的 UI 支持。
-
-但是因为采用了 Java 构建，性能同样是短板，适合对于 API 管理有强烈需求的场景。
-
-# 个人感受
-
-类似的框架可以有千万种，但是技术的本质却是类似的。
-
-应该直接学习其原理，然后手写一个。
-
-吸取各种框架的优势。
+这些开源网关都具有不同的特点和优势，你可以根据自己的需求选择最适合的。
 
 # 参考资料
 
-https://network.51cto.com/article/674451.html
-
-https://segmentfault.com/a/1190000021541335
+https://github.com/search?q=%E7%BD%91%E5%85%B3+language%3AJava&type=repositories&p=1&l=Java
 
 * any list
 {:toc}

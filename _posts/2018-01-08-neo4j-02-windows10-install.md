@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Neo4j-02-图数据库 neo4j windows10 install 安装笔记
+title:  Neo4j-02-图数据库 neo4j install on windows10 安装笔记
 date:  2018-1-8 14:18:33 +0800
 categories: [SQL]
 tags: [nosql, neo4j]
@@ -273,3 +273,27 @@ CREATE (methodB:Method {name: 'methodB', app: appB})
   
 // 创建调用关系  
 CREATE (methodA)-[:CALLS]->(methodB)
+
+
+# 启动报错
+
+安装路径:
+
+```
+C:\Users\dh\AppData\Local\Programs\Neo4j Desktop
+```
+
+or：
+
+```
+D:\Users\dh\AppData\Local\Programs\Neo4j Desktop
+```
+
+数据路径：
+
+```
+C:\Users\dh\C:\Users\dh\.Neo4jDesktop
+```
+
+重新安装一定要把数据清理干净。
+
