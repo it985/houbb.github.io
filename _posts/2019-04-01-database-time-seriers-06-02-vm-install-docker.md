@@ -1,11 +1,41 @@
 ---
 layout: post
-title: 时序数据库-08-vm VictoriaMetrics install on docker 安装 vm
+title: 时序数据库-06-02-vm VictoriaMetrics install on docker 安装 vm
 date:  2019-4-1 19:24:57 +0800
 categories: [Database]
 tags: [database, dis-database, distributed, time-series, monitor, docker, sf]
 published: true
 ---
+
+# 时序数据库系列
+
+[时序数据库-01-时序数据库有哪些？为什么要使用](https://houbb.github.io/2019/04/01/database-time-seriers-01-overview)
+
+[时序数据库-02-聊一聊时序数据库](https://houbb.github.io/2019/04/01/database-time-seriers-02-chat)
+
+[时序数据库-03-opentsdb-分布式时序数据库](https://houbb.github.io/2019/04/01/database-time-seriers-03-opentsdb)
+
+[时序数据库-04-InfluxData-分布式时序数据库](https://houbb.github.io/2019/04/01/database-time-seriers-04-influxdb)
+
+[时序数据库-05-TDengine 是一款开源、高性能、云原生的时序数据库 (Time-Series Database, TSDB)](https://houbb.github.io/2019/04/01/database-time-seriers-05-00-tdengine-overview)
+
+[时序数据库-05-TDengine Time-Series Database, TSDB](https://houbb.github.io/2019/04/01/database-time-seriers-05-01-tdengine-chat)
+
+[时序数据库-05-TDengine windows11 WSL 安装实战笔记 docker](https://houbb.github.io/2019/04/01/database-time-seriers-05-02-windows-wls-install)
+
+[时序数据库-06-01-vm VictoriaMetrics 快速、经济高效的监控解决方案和时间序列数据库](https://houbb.github.io/2019/04/01/database-time-seriers-06-01-vm-intro)
+
+[时序数据库-06-02-vm VictoriaMetrics install on docker 安装 vm](https://houbb.github.io/2019/04/01/database-time-seriers-06-02-vm-install-docker)
+
+[时序数据库-06-03-vm VictoriaMetrics java 整合](https://houbb.github.io/2019/04/01/database-time-seriers-06-03-vm-java-integration)
+
+[时序数据库-06-04-vm VictoriaMetrics storage 存储原理简介](https://houbb.github.io/2019/04/01/database-time-seriers-06-04-vm-storage)
+
+[时序数据库-06-05-vm VictoriaMetrics cluster 集群原理](https://houbb.github.io/2019/04/01/database-time-seriers-06-05-vm-cluster)
+
+[时序数据库-06-06-vm VictoriaMetrics cluster 集群访问方式](https://houbb.github.io/2019/04/01/database-time-seriers-06-06-vm-cluster-access)
+
+
 
 # VictoriaMetrics
 
@@ -17,7 +47,9 @@ VictoriaMetrics的集群版本可以在此处找到。
 
 # WSL 的 docker 管理
 
-在Linux系统中，使用Docker通常涉及几个基本步骤，包括安装Docker、启动Docker服务、获取（pull）Docker镜像以及运行（run）容器。以下是使用`sudo snap install docker`命令安装Docker后，运行Docker容器的基本步骤：
+在Linux系统中，使用Docker通常涉及几个基本步骤，包括安装Docker、启动Docker服务、获取（pull）Docker镜像以及运行（run）容器。
+
+以下是使用`sudo snap install docker`命令安装Docker后，运行Docker容器的基本步骤：
 
 1. **安装Docker**：您已经通过`snap`安装了Docker。
 
@@ -113,7 +145,7 @@ mkdir -p /home/dh/victoria-metrics-data:/victoria-metrics-data
 下载运行：
 
 ```sh
-$ docker run -d -p 8428:8428 -v /home/dh/victoria-metrics-data:/victoria-metrics-data --name victoria-metrics victoriametrics/victoria-metrics:v1.95.1
+$ sudo docker run -d -p 8428:8428 -v /home/dh/victoria-metrics-data:/victoria-metrics-data --name victoria-metrics victoriametrics/victoria-metrics:v1.95.1
 ```
 
 对应的效果：
@@ -264,10 +296,17 @@ curl 'http://127.0.0.1:8428/api/v1/import' \
 curl 'http://127.0.0.1:8428/api/v1/import' \
 -H "Content-Type:application/json" \
 -X POST \
--d '{"metric":{"__name__":"testVm","hostname":"127.0.0.1"},"values":[77],"timestamps":[1713493018327]}'
+-d '{"metric":{"__name__":"testVm","hostname":"127.0.0.1"},"values":[77],"timestamps":[1721403684000]}'
 ```
 
-1713493018327 这个最好是当前时间。
+1721403684000 这个最好是当前时间。
+
+可以用下面的命令，获取当前的时间  
+
+```sh
+$ date +%s
+1721403684
+```
 
 ## curl 查询
 
@@ -296,17 +335,26 @@ $ curl 'http://localhost:8428/api/v1/export' -d 'match={__name__="testVm"}'
 
 # 批量 curl 操作
 
+发现一次性多个数据，需要使用换行符来连接起来就可以。
+
 ```sh
 curl 'http://127.0.0.1:8428/api/v1/import' \
--H "Content-Type:application/json" \
+-H "Content-Type: application/json" \
 -X POST \
--d '{"metric":{"__name__":"testVm2","hostname":"127.0.0.1"},"values":[77],"timestamps":[1713493018327]}'
+-d '
+{"metric":{"__name__":"testVmBatch","hostname":"127.0.0.1"},"values":[77],"timestamps":[1721403684000]}
+{"metric":{"__name__":"testVmBatch","hostname":"127.0.0.2"},"values":[77],"timestamps":[1721403684000]}
+{"metric":{"__name__":"testVmBatch","hostname":"127.0.0.3"},"values":[77],"timestamps":[1721403684000]}
+'
 ```
 
 查询：
 
 ```
-curl 'http://localhost:8428/api/v1/export' -d 'match={__name__="testVm2"}'
+$ curl 'http://localhost:8428/api/v1/export' -d 'match={__name__="testVmBatch"}'
+{"metric":{"__name__":"testVmBatch","hostname":"127.0.0.3"},"values":[77],"timestamps":[1721403684000]}
+{"metric":{"__name__":"testVmBatch","hostname":"127.0.0.2"},"values":[77,77,77],"timestamps":[1721403684000,1721403684000,1721403684000]}
+{"metric":{"__name__":"testVmBatch","hostname":"127.0.0.1"},"values":[77,77],"timestamps":[1721403684000,1721403684000]}
 ```
 
 # 批量呢
