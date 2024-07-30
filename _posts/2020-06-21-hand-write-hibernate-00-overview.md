@@ -13,25 +13,43 @@ published: true
 
 Hibernate 属于比较早的框架了，后期将实现一套 mybatis。
 
-## 列表
+# 手写 Hibernate 系列
 
-[rpc](https://houbb.github.io/2018/08/24/simple-rpc)
+[手写 Hibernate ORM 框架 00-hibernate 简介](https://houbb.github.io/2020/06/21/hand-write-hibernate-00-intro)
 
-[mvc](https://houbb.github.io/2018/09/27/java-servlet-tutorial-21-fake-mvc-simple)
+[手写 Hibernate ORM 框架 00-环境准备](https://houbb.github.io/2020/06/21/hand-write-hibernate-00-overview)
 
-[ioc](https://houbb.github.io/2019/11/06/java-ioc-01-overview)
+[手写 Hibernate ORM 框架 01-注解常量定义](https://houbb.github.io/2020/06/21/hand-write-hibernate-01-annotation)
 
-[thread-pool](https://houbb.github.io/2019/01/18/jcip-21-thread-pool)
+[手写 Hibernate ORM 框架 02-实体 Bean 定义，建表语句自动生成](https://houbb.github.io/2020/06/21/hand-write-hibernate-02-bean)
 
-# 导航
+[手写 Hibernate ORM 框架 03-配置文件读取, 数据库连接构建](https://houbb.github.io/2020/06/21/hand-write-hibernate-03-config)
 
-[手写 Hibernate ORM 框架-01-注解定义、常量定义](https://blog.csdn.net/ryo1060732496/article/details/80172494)
+[手写 Hibernate ORM 框架 04-持久化实现](https://houbb.github.io/2020/06/21/hand-write-hibernate-04-persist)
 
-[手写 Hibernate ORM 框架-02-实体 Bean 定义，建表语句自动生成](https://blog.csdn.net/ryo1060732496/article/details/80173002)
+[手写 Hibernate ORM 框架 05-整体效果测试验证](https://houbb.github.io/2020/06/21/hand-write-hibernate-05-test)
 
-[手写 Hibernate ORM 框架-03-Hibernate 配置文件读取, 数据库连接构建](https://blog.csdn.net/ryo1060732496/article/details/80173101)
+## 从零手写组件系列
 
-[手写 Hibernate ORM 框架-04-数据库交互，数据持久化](https://blog.csdn.net/ryo1060732496/article/details/80173244)
+[java 从零手写 spring ioc 控制反转](https://github.com/houbb/ioc)
+
+[java 从零手写 spring mvc](https://github.com/houbb/mvc)
+
+[java 从零手写 jdbc-pool 数据库连接池](https://github.com/houbb/jdbc-pool)
+
+[java 从零手写 mybatis](https://github.com/houbb/mybatis)
+
+[java 从零手写 hibernate](https://github.com/houbb/hibernate)
+
+[java 从零手写 rpc 远程调用](https://github.com/houbb/rpc)
+
+[java 从零手写 mq 消息组件](https://github.com/houbb/rpc)
+
+[java 从零手写 cache 缓存](https://github.com/houbb/cache)
+
+[java 从零手写 nginx4j](https://github.com/houbb/nginx4j)
+
+[java 从零手写 tomcat](https://github.com/houbb/minicat)
 
 # 前言
 
@@ -41,7 +59,7 @@ Hibernate 相信接触过 java 的人都不会陌生。
 
 ## 代码地址
 
-> [hibernate-simulator](https://github.com/houbb/hibernate-simulator/tree/release_1.0.1) 
+> [java 从零手写 hibernate](https://github.com/houbb/hibernate) 
 
 # 环境准备
 
@@ -55,113 +73,31 @@ jdk 为 1.8
 
 # pom.xml
 
-## 内容
+## 依赖
 
-pom 文件如下:
+pom 核心依赖如下:
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.github.houbb</groupId>
-    <artifactId>hibernate-simulator</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
-
-    <description>模拟 Hibernate</description>
-    
-    <properties>
-        <!--============================== All Plugins START==============================-->
-        <plugin.compiler.version>3.2</plugin.compiler.version>
-        <plugin.compiler.version>3.2</plugin.compiler.version>
-        <plugin.surefire.version>2.18.1</plugin.surefire.version>
-        <plugin.surefire.skip-it>true</plugin.surefire.skip-it>
-        <plugin.surefire.ignore-failure>true</plugin.surefire.ignore-failure>
-        <!--============================== All Plugins END  ==============================-->
-
-        <!--main-->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.compiler.level>1.8</project.compiler.level>
-
-        <mysql.version>5.1.34</mysql.version>
-        <dom4j.version>1.6.1</dom4j.version>
-    </properties>
-
-    <dependencies>
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
-        </dependency>
-
-        <!--dom4j-->
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>${dom4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
-
-    <build>
-        <finalName>${project.name}</finalName>
-
-        <pluginManagement>
-            <!--============================== All Plugins ==============================-->
-            <plugins>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${plugin.compiler.version}</version>
-                    <configuration>
-                        <source>${project.compiler.level}</source>
-                        <target>${project.compiler.level}</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${plugin.surefire.version}</version>
-                    <configuration>
-                        <skipTests>true</skipTests>
-                        <testFailureIgnore>true</testFailureIgnore>
-                    </configuration>
-                </plugin>
-
-            </plugins>
-        </pluginManagement>
-
-        <!--use plugins-->
-        <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-
-        </plugins>
-    </build>
-
-</project>
+<dependencies>
+    <dependency>
+        <groupId>com.github.houbb</groupId>
+        <artifactId>heaven</artifactId>
+    </dependency>
+    <!--============================== OTHER ==============================-->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+    <!--dom4j-->
+    <dependency>
+        <groupId>dom4j</groupId>
+        <artifactId>dom4j</artifactId>
+    </dependency>
+</dependencies>
 ```
 
 ## jar 包功能说明
@@ -177,42 +113,45 @@ pom 文件如下:
 便于鸟瞰整个项目
 
 ```
-.
-├── main
-│   ├── java
-│   │   └── com
-│   │       └── ryo
-│   │           └── hibernate
-│   │               └── simulator
-│   │                   ├── hibernate
-│   │                   │   ├── Session.java
-│   │                   │   ├── Table.java
-│   │                   │   ├── annotations
-│   │                   │   │   ├── Column.java
-│   │                   │   │   ├── Entity.java
-│   │                   │   │   ├── GenerateValue.java
-│   │                   │   │   └── Id.java
-│   │                   │   ├── constants
-│   │                   │   │   ├── HibernateConstant.java
-│   │                   │   │   └── TypeMap.java
-│   │                   │   └── util
-│   │                   │       ├── ConnectionUtil.java
-│   │                   │       ├── FieldUtil.java
-│   │                   │       └── TableUtil.java
-│   │                   ├── model
-│   │                   │   └── User.java
-│   │                   └── util
-│   │                       ├── CollectionUtil.java
-│   │                       ├── ReflectionUtil.java
-│   │                       ├── StringBuilderUtil.java
-│   │                       └── StringUtil.java
-│   └── resources
-│       └── hibernate.cfg.xml
+D:.                       
+├─java                    
+│  └─com                  
+│      └─github           
+│          └─houbb                   
+│              └─hibernate           
+│                  │  Session.java   
+│                  │  Table.java     
+│                  │                 
+│                  ├─annotations     
+│                  │      Column.java
+│                  │      Entity.java
+│                  │      GenerateValue.java
+│                  │      Id.java
+│                  │
+│                  ├─constants
+│                  │      HibernateConstant.java
+│                  │      TypeMap.java
+│                  │
+│                  ├─model
+│                  │      User.java
+│                  │
+│                  └─util
+│                          CollectionUtil.java
+│                          ConnectionUtil.java
+│                          FieldUtil.java
+│                          ReflectionUtil.java
+│                          StringBuilderUtil.java
+│                          StringUtil.java
+│                          TableUtil.java
+│
+└─resources
 ```
 
-# 目录导航
+# 小结
 
-> [目录导航](https://blog.csdn.net/ryo1060732496/article/details/80172300)
+本文主要介绍了基本的依赖，和项目整体结构。
+
+后续我们将用几节的文章，介绍一下如何实现一个简单版本的 hibernate
 
 * any list
 {:toc}
